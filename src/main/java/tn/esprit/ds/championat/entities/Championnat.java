@@ -29,7 +29,12 @@ public class Championnat {
     private DetailChampionnat detailChampionnat;
 
     // Relation avec Course
-    @OneToMany(mappedBy = "championnat", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "championnat_course",
+            joinColumns = @JoinColumn(name = "championnat_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
     @ToString.Exclude
     private Set<Course> courses;
 }

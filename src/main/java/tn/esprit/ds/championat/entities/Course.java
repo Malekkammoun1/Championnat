@@ -24,9 +24,9 @@ public class Course {
     private Date dateCourse;
 
     // Relation avec Championnat
-    @ManyToOne
-    @JoinColumn(name = "championnat_id")
-    private Championnat championnat;
+    @ManyToMany(mappedBy = "courses")
+    @ToString.Exclude
+    private Set<Championnat> championnats;
 
     // Relation avec Position
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
