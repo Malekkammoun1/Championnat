@@ -3,6 +3,8 @@ package tn.esprit.ds.championat.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -20,10 +22,16 @@ public class Sponsor {
     private String nom;
     private String pays;
     private Float budgetAnnuel;
+
     private Boolean bloquerContrat;
+
+    private Boolean archived;
+    LocalDate dateCreation;
+    LocalDate dateDerniereModification;
 
     // Relation avec Contrat
     @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Contrat> contrats;
+
 }
