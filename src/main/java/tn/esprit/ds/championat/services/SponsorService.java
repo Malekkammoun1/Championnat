@@ -1,25 +1,26 @@
 package tn.esprit.ds.championat.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import tn.esprit.ds.championat.entities.Sponsor;
 import tn.esprit.ds.championat.repositories.SponsorRepository;
-import tn.esprit.ds.championat.services.ISponsorService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@Service
+@RequiredArgsConstructor
 public class SponsorService implements ISponsorService {
 
-    private SponsorRepository  sponsorRepository;
+    private final SponsorRepository sponsorRepository;
 
     @Override
     public Sponsor ajouterSponsor(Sponsor sponsor) {
-
         sponsor.setArchived(false);
         sponsor.setBloquerContrat(false);
-        sponsor.setDateCreation(LocalDate.from(LocalDateTime.now()));
+        sponsor.setDateCreation(LocalDate.now());
+        sponsor.setDateDerniereModification(LocalDate.now());
         return sponsorRepository.save(sponsor);
     }
 
@@ -27,7 +28,8 @@ public class SponsorService implements ISponsorService {
     public List<Sponsor> ajouterSponsors(List<Sponsor> sponsors) {
         List<Sponsor> sponsorsInitialises = sponsors.stream()
                 .peek(sponsor -> {
-                    sponsor.setDateCreation(LocalDate.from(LocalDateTime.now()));  // LocalDateTime au lieu de LocalDate
+                    sponsor.setDateCreation(LocalDate.now());
+                    sponsor.setDateDerniereModification(LocalDate.now());
                     sponsor.setArchived(false);
                     sponsor.setBloquerContrat(false);
                 })
@@ -37,7 +39,7 @@ public class SponsorService implements ISponsorService {
 
     @Override
     public Sponsor modifierSponsor(Sponsor sponsor) {
-        sponsor.setDateCreation(LocalDate.from(LocalDateTime.now()));
+        sponsor.setDateDerniereModification(LocalDate.now());
         return sponsorRepository.save(sponsor);
     }
 
@@ -59,9 +61,12 @@ public class SponsorService implements ISponsorService {
     @Override
     public Boolean archiverSponsor(Long idSponsor) {
         Sponsor sp = recupererSponsor(idSponsor);
-        sp.setArchived(true);
-        sponsorRepository.save(sp);
-        return true;
+        if (sp != null) {
+            sp.setArchived(true);
+            sp.setDateDerniereModification(LocalDate.now());
+            sponsorRepository.save(sp);
+            return true;
+        }
+        return false;
     }
-
 }

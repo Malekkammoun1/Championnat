@@ -9,23 +9,31 @@ import java.util.List;
 
 public interface PiloteRepository extends JpaRepository<Pilote, Long> {
 
-    // Trouver les pilotes par équipe
-    List<Pilote> findByEquipeId(Long equipeId);
+    // CORRIGÉ: Trouver les pilotes par équipe (avec le bon nom de champ)
+    List<Pilote> findByEquipeIdEquipe(Long idEquipe);
 
-    // Trouver les pilotes par nom (libellé)
+    // Alternative avec @Query si vous préférez garder le même nom de méthode
+    @Query("SELECT p FROM Pilote p WHERE p.equipe.idEquipe = :idEquipe")
+    List<Pilote> findByEquipeId(@Param("idEquipe") Long idEquipe);
+
+    // Trouver les pilotes par nom (libellé) - OK
     List<Pilote> findByLibelleContainingIgnoreCase(String libelle);
 
-    // Trouver les pilotes avec plus de X points
+    // Trouver les pilotes avec plus de X points - OK
     List<Pilote> findByNbPointsGoldGreaterThan(Integer points);
 
-    // Trouver les top N pilotes par points
+    // Trouver les top N pilotes par points - OK
     @Query("SELECT p FROM Pilote p ORDER BY p.nbPointsGold DESC")
     List<Pilote> findTopPilotes(@Param("limit") int limit);
 
-    // Compter les pilotes par équipe
-    long countByEquipeId(Long equipeId);
+    // CORRIGÉ: Compter les pilotes par équipe
+    long countByEquipeIdEquipe(Long idEquipe);
 
-    // Trouver les pilotes sans équipe
+    // Alternative avec @Query
+    @Query("SELECT COUNT(p) FROM Pilote p WHERE p.equipe.idEquipe = :idEquipe")
+    long countByEquipeId(@Param("idEquipe") Long idEquipe);
+
+    // Trouver les pilotes sans équipe - OK
     @Query("SELECT p FROM Pilote p WHERE p.equipe IS NULL")
     List<Pilote> findPilotesSansEquipe();
 }

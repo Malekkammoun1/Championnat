@@ -19,7 +19,6 @@ public class PiloteService implements IPiloteService {
         if (p.getClassementGeneral() == null) {
             p.setClassementGeneral(0);
         }
-
         Pilote saved = piloteRepository.save(p);
         return "Pilote ajouté avec succès. ID: " + saved.getIdPilote() + ", Nom: " + saved.getLibelle();
     }
