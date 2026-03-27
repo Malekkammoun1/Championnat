@@ -21,7 +21,7 @@ public class PiloteController {
         return piloteService.addPilote(pilote);
     }
 
-    // 4. Affecter un Pilote à une Equipe
+    // Affecter un Pilote à une Equipe
     @PutMapping("/affecter-pilote-equipe/{piloteId}/{equipeId}")
     @Operation(summary = "Affecter un pilote existant à une équipe existante")
     public String affecterPiloteAEquipe(

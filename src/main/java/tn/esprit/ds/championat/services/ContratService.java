@@ -20,9 +20,9 @@ public class ContratService implements IContratService {
     private final SponsorRepository sponsorRepository;
     private final EquipeRepository equipeRepository;
 
-    /**
-     * Ajouter un contrat et l'affecter à un sponsor et une équipe
-     */
+
+     //Ajouter un contrat et l'affecter à un sponsor et une équipe
+
     @Override
     @Transactional
     public Contrat ajouterContratEtAffecterASponsorEtEquipe(Contrat contrat, Long sponsorId, Long equipeId) {

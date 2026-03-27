@@ -22,4 +22,9 @@ public class PiloteService implements IPiloteService {
         Pilote saved = piloteRepository.save(p);
         return "Pilote ajouté avec succès. ID: " + saved.getIdPilote() + ", Nom: " + saved.getLibelle();
     }
+
+    @Override
+    public String affecterPiloteAEquipe(Long piloteId, Long equipeId) {
+        return "";
+    }
 }

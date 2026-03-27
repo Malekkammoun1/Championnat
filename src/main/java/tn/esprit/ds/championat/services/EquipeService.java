@@ -26,10 +26,9 @@ public class EquipeService implements IEquipeService {
         return equipeRepository.save(equipe);
     }
 
-    /**
-     * Affecter un Pilote existant à une Equipe existante (ManyToOne)
-     * Similaire à: Affectation DetailEquipe à Equipe
-     */
+
+     //Affecter un Pilote existant à une Equipe existante (ManyToOne)
+
     @Override
     @Transactional
     public Equipe affecterPiloteAEquipe(Long piloteId, Long equipeId) {

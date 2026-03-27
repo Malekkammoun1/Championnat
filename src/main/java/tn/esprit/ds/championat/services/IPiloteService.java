@@ -4,4 +4,6 @@ import tn.esprit.ds.championat.entities.Pilote;
 
 public interface IPiloteService {
     String addPilote(Pilote p);
+
+    String affecterPiloteAEquipe(Long piloteId, Long equipeId);
 }

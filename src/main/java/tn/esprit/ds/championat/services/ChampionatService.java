@@ -22,9 +22,9 @@ public class ChampionatService implements IChampionatService {
     private final CourseRepository courseRepository;
     private final DetailChampionatRepository detailChampionnatRepository;
 
-    /**
-     * 1. Ajouter un championnat avec ses courses associées (ManyToMany)
-     */
+
+     // Ajouter un championnat avec ses courses associées
+
     @Override
     @Transactional
     public Championnat addChampionnatAndAssociatedCourses(Championnat championnat) {
@@ -46,9 +46,9 @@ public class ChampionatService implements IChampionatService {
         return championnatSaved;
     }
 
-    /**
-     * 2. Ajouter un DetailChampionnat et l'affecter à un Championnat existant (OneToOne)
-     */
+
+     // Ajouter un DetailChampionnat et l'affecter à un Championnat existant
+
     @Override
     @Transactional
     public Championnat ajouterEtAffecterDetailChampionnatAChampionnat(DetailChampionnat detailChampionnat, Long idChampionnat) {
@@ -66,9 +66,9 @@ public class ChampionatService implements IChampionatService {
         return championnatRepository.save(championnat);
     }
 
-    /**
-     * 3. Affecter une Course existante à un Championnat existant (ManyToMany)
-     */
+
+     //Affecter une Course existante à un Championnat existant
+
     @Override
     @Transactional
     public String affecterCourseAChampionnat(Long courseId, Long championnatId) {
@@ -80,7 +80,7 @@ public class ChampionatService implements IChampionatService {
         Championnat championnat = championnatRepository.findById(championnatId)
                 .orElseThrow(() -> new RuntimeException("Championnat non trouvé avec l'id: " + championnatId));
 
-        // Initialiser les sets si nécessaire
+        // Initialiser les sets
         if (course.getChampionnats() == null) {
             course.setChampionnats(new HashSet<>());
         }
