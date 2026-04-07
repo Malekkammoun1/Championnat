@@ -36,4 +36,13 @@ public interface PiloteRepository extends JpaRepository<Pilote, Long> {
     // Trouver les pilotes sans équipe - OK
     @Query("SELECT p FROM Pilote p WHERE p.equipe IS NULL")
     List<Pilote> findPilotesSansEquipe();
+
+    // Les pilotes d'une catégorie triés par points décroissants
+    List<Pilote> findByCategorieOrderByNbPointsGoldDesc(String categorie);
+
+    // Les pilotes qui ne sont pas d'une catégorie donnée
+    List<Pilote> findByCategorieNot(String categorie);
+    // Somme des points d'un pilote pour une année donnée (à partir des positions)
+    @Query("SELECT COALESCE(SUM(pos.nbPoints), 0) FROM Position pos JOIN pos.course c WHERE pos.pilote.idPilote = :piloteId AND YEAR(c.dateCourse) = :annee")
+    Integer sumPointsByPiloteAndAnnee(@Param("piloteId") Long piloteId, @Param("annee") int annee);
 }

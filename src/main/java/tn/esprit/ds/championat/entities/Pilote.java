@@ -21,6 +21,8 @@ public class Pilote {
     private Integer nbPointsGold;
     private Integer classementGeneral;
 
+    private String categorie;
+
     // Relation avec Equipe
     @ManyToOne
     @JoinColumn(name = "equipe_id")
