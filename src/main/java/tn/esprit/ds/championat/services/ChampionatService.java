@@ -100,4 +100,9 @@ public class ChampionatService implements IChampionatService {
 
         return "Course affectée avec succès au championnat: " + championnat.getLibelle();
     }
+    public void planifierMatch(String equipeA, String equipeB) throws InterruptedException {
+        // Ici vous pouvez mettre une logique métier simple
+        System.out.println("Planification du match : " + equipeA + " vs " + equipeB);
+        Thread.sleep(50); // simule un traitement
+    }
 }

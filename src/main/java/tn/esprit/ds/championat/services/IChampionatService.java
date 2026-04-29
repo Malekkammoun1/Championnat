@@ -7,4 +7,5 @@ public interface IChampionatService {
     Championnat addChampionnatAndAssociatedCourses(Championnat championnat);
     Championnat ajouterEtAffecterDetailChampionnatAChampionnat(DetailChampionnat detailChampionnat, Long idChampionnat);
     String affecterCourseAChampionnat(Long courseId, Long championnatId);
+    void planifierMatch(String equipeA, String equipeB) throws InterruptedException;
 }
