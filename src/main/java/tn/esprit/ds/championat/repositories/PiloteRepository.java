@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PiloteRepository extends JpaRepository<Pilote, Long> {
 
@@ -45,4 +46,6 @@ public interface PiloteRepository extends JpaRepository<Pilote, Long> {
     // Somme des points d'un pilote pour une année donnée (à partir des positions)
     @Query("SELECT COALESCE(SUM(pos.nbPoints), 0) FROM Position pos JOIN pos.course c WHERE pos.pilote.idPilote = :piloteId AND YEAR(c.dateCourse) = :annee")
     Integer sumPointsByPiloteAndAnnee(@Param("piloteId") Long piloteId, @Param("annee") int annee);
+
+    Optional<Pilote> findByLibelle(String libelle);
 }

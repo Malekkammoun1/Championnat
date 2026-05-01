@@ -13,6 +13,7 @@ import tn.esprit.ds.championat.repositories.SponsorRepository;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -90,5 +91,19 @@ public class ContratService implements IContratService {
                         equipeLibelle, montantFormate, sponsorNom);
             }
         }
+    }
+
+    @Override
+    public HashMap<String, Float> historiqueContratsEquipe(String libelleEquipe) {
+        Equipe equipe = equipeRepository.findByLibelle(libelleEquipe)
+                .orElseThrow(() -> new RuntimeException("Equipe non trouvée"));
+        List<Contrat> contrats = contratRepository.findByEquipeOrderByAnneeDesc(equipe);
+        HashMap<String, Float> map = new HashMap<>();
+        for (Contrat c : contrats) {
+            if (c.getPilote() != null) {
+                map.putIfAbsent(c.getPilote().getLibelle(), c.getMontant());
+            }
+        }
+        return map;
     }
 }

@@ -3,6 +3,9 @@ package tn.esprit.ds.championat.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -28,4 +31,8 @@ public class Contrat {
     @ManyToOne
     @JoinColumn(name = "equipe_id")
     private Equipe equipe;
+
+    @ManyToOne
+    @JoinColumn(name = "pilote_id")
+    private Pilote pilote;
 }

@@ -6,11 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.ds.championat.entities.Equipe;
 import tn.esprit.ds.championat.entities.Pilote;
-import tn.esprit.ds.championat.repositories.PiloteRepository;
+import tn.esprit.ds.championat.entities.Position;
+import tn.esprit.ds.championat.repositories.*;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -18,6 +22,10 @@ import java.util.List;
 public class PiloteService implements IPiloteService {
 
     private final PiloteRepository piloteRepository;
+    private final EquipeRepository equipeRepository;
+    private final PositionRepository positionRepository;
+    private final CourseRepository courseRepository;
+    private final ChampionatRepository championnatRepository;
 
     @Override
     public String addPilote(Pilote p) {
@@ -38,6 +46,7 @@ public class PiloteService implements IPiloteService {
         Integer total = piloteRepository.sumPointsByPiloteAndAnnee(p.getIdPilote(), annee);
         return total != null ? total : 0;
     }
+
 
     @Scheduled(cron = "0 15 11 31 12 ?") // 31 décembre 11:15
     @Transactional
@@ -70,6 +79,28 @@ public class PiloteService implements IPiloteService {
 
         log.info("Classement mis à jour pour la catégorie {}", categorieCible);
     }
+
+
+    @Override
+    public Integer nbPointsParPilotesUneEquipeChampionnatPourUneAnne(Long idEquipe, Integer annee) {
+        Equipe equipe = equipeRepository.findById(idEquipe)
+                .orElseThrow(() -> new RuntimeException("Equipe non trouvée"));
+        int total = 0;
+        for (Pilote p : equipe.getPilotes()) {
+            Integer points = positionRepository.sumPointsByPiloteAndAnnee(p.getIdPilote(), annee);
+            total += (points != null ? points : 0);
+        }
+        return total;
+    }
+
+    @Override
+    public Float moyennePositionsEntreDeuxDate(LocalDate startDate, LocalDate endDate, String libellePilote) {
+        Pilote pilote = piloteRepository.findByLibelle(libellePilote)
+                .orElseThrow(() -> new RuntimeException("Pilote non trouvé"));
+        Float moyenne = positionRepository.averagePositionByPiloteAndDateBetween(pilote, startDate, endDate);
+        return moyenne != null ? moyenne : 0.0f;
+    }
+
 
     // @PostConstruct commenté pour ne pas exécuter à chaque démarrage
 }

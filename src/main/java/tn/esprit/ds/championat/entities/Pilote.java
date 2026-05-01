@@ -1,5 +1,6 @@
 package tn.esprit.ds.championat.entities;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
