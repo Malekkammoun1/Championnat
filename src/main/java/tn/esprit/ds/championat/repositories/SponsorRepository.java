@@ -7,11 +7,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
 
     // Trouver les sponsors non archivés
     List<Sponsor> findByArchivedFalse();
+
+    //findByNom
+    Optional<Sponsor> findByNom(String nom);
 
     // Trouver les sponsors par pays
     List<Sponsor> findByPays(String pays);

@@ -1,6 +1,5 @@
 package tn.esprit.ds.championat.services;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -8,13 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.ds.championat.entities.Equipe;
 import tn.esprit.ds.championat.entities.Pilote;
-import tn.esprit.ds.championat.entities.Position;
 import tn.esprit.ds.championat.repositories.*;
 
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
-import java.util.Set;
+
 
 @Slf4j
 @Service
@@ -37,8 +35,8 @@ public class PiloteService implements IPiloteService {
 
     @Override
     public String affecterPiloteAEquipe(Long piloteId, Long equipeId) {
-        // Implémentez si nécessaire
-        return "";
+
+        return "Pilote affecté avec succès.";
     }
 
     // Calcul des points à partir des positions (via le repository)

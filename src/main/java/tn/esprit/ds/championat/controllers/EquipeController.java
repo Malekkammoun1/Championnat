@@ -17,6 +17,7 @@ public class EquipeController {
     @PostMapping("/add")
     @Operation(summary = "Ajouter une nouvelle équipe")
     public Equipe ajouterEquipe(@RequestBody Equipe e) {
+
         return equipeService.ajouterEquipe(e);
     }
 

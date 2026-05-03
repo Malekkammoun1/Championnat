@@ -3,16 +3,19 @@ package tn.esprit.ds.championat.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.ds.championat.dto.PiloteDto;
 import tn.esprit.ds.championat.entities.Championnat;
 import tn.esprit.ds.championat.entities.Course;
 import tn.esprit.ds.championat.entities.DetailChampionnat;
 import tn.esprit.ds.championat.repositories.ChampionatRepository;
-import tn.esprit.ds.championat.repositories.ChampionatRepository;
 import tn.esprit.ds.championat.repositories.CourseRepository;
 import tn.esprit.ds.championat.repositories.DetailChampionatRepository;
-import tn.esprit.ds.championat.repositories.DetailChampionatRepository;
+import tn.esprit.ds.championat.repositories.PositionRepository;
 
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class ChampionatService implements IChampionatService {
     private final ChampionatRepository championnatRepository;
     private final CourseRepository courseRepository;
     private final DetailChampionatRepository detailChampionnatRepository;
+    private final PositionRepository PositionRepository;
 
 
      // Ajouter un championnat avec ses courses associées
@@ -80,13 +84,6 @@ public class ChampionatService implements IChampionatService {
         Championnat championnat = championnatRepository.findById(championnatId)
                 .orElseThrow(() -> new RuntimeException("Championnat non trouvé avec l'id: " + championnatId));
 
-        // Initialiser les sets
-        if (course.getChampionnats() == null) {
-            course.setChampionnats(new HashSet<>());
-        }
-        if (championnat.getCourses() == null) {
-            championnat.setCourses(new HashSet<>());
-        }
 
         // Ajouter la course au championnat (ManyToMany - côté championnat)
         championnat.getCourses().add(course);
@@ -99,6 +96,23 @@ public class ChampionatService implements IChampionatService {
         championnatRepository.save(championnat);
 
         return "Course affectée avec succès au championnat: " + championnat.getLibelle();
+    }
+
+    @Override
+    public List<PiloteDto> listeWinners(Integer annee) {
+        List<Championnat> championnats = championnatRepository.findByAnneeGreaterThan(annee);
+        List<PiloteDto> result = new ArrayList<>();
+        for (Championnat c : championnats) {
+            PositionRepository.findGagnantByChampionnatId(c.getIdChampionnat())
+                    .ifPresent(gagnant -> {
+                        result.add(new PiloteDto(
+                                gagnant.getLibelle(),   // nom du pilote
+                                c.getLibelle(),         // nom du championnat
+                                c.getAnnee()
+                        ));
+                    });
+        }
+        return result;
     }
     public void planifierMatch(String equipeA, String equipeB) throws InterruptedException {
         // Ici vous pouvez mettre une logique métier simple

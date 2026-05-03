@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.ds.championat.dto.ContratResponseDto;
 import tn.esprit.ds.championat.entities.Contrat;
 import tn.esprit.ds.championat.entities.Equipe;
 import tn.esprit.ds.championat.entities.Sponsor;
@@ -105,5 +106,41 @@ public class ContratService implements IContratService {
             }
         }
         return map;
+    }
+
+
+
+    @Override
+    @Transactional
+    public ContratResponseDto ajoutContratEtAffecterASponsorEtEquipe(Contrat contrat,
+                                                                     String libelleEquipe,
+                                                                     String nomSponsor,
+                                                                     String pays) {
+        // 1. Récupérer ou créer l'équipe
+        Equipe equipe = equipeRepository.findByLibelle(libelleEquipe)
+                .orElseThrow(() -> new RuntimeException("Équipe non trouvée : " + libelleEquipe));
+
+        // 2. Récupérer ou créer le sponsor
+        Sponsor sponsor = sponsorRepository.findByNom(nomSponsor)
+                .orElseGet(() -> {
+                    Sponsor s = new Sponsor();
+                    s.setNom(nomSponsor);
+                    s.setPays(pays);
+                    return sponsorRepository.save(s);  // bien sauvegarder
+                });
+
+        // 3. Affecter et sauvegarder le contrat
+        contrat.setEquipe(equipe);
+        contrat.setSponsor(sponsor);
+        Contrat saved = contratRepository.save(contrat);
+
+        // 4. Construire et retourner le DTO
+        return new ContratResponseDto(
+                saved.getIdContrat(),
+                saved.getMontant(),
+                saved.getAnnee().toString(),   // si annee est Integer, convertir en String
+                saved.getEquipe().getLibelle(),
+                saved.getSponsor().getNom()
+        );
     }
 }
